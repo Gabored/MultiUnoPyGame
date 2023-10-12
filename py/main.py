@@ -1,6 +1,7 @@
 from helpers import create_deck
 import random
 from player import Player
+from game import Game
 
 
 
@@ -19,13 +20,11 @@ player3 = Player("3", h3)
 player4 = Player("4", h4)
 
 print("\n")
-print(player1.hand)
+player1.print_hand()
 print("\n")
-print(player2.hand)
-print("\n")
-print(player3.hand)
-print("\n")
-print(player4.hand)
+table = Game([player1])
+table.play()
+
 
 
 

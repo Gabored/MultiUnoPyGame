@@ -12,5 +12,13 @@ class Card:
 
     def __repr__(self) -> str:
         ''' Returns str print of attributes including color of a Card Instance'''
-        return f"{self.number} {self.color} {self.action}"
+        return f"{self.value_card()} - {self.color}"
+    
+    def value_card(self):
+        ''' Function that prevents from returning None when value is missing in action cards or color cards'''
+        if self.number == None:
+            return self.action
+        else:
+            return self.number
+    
     
