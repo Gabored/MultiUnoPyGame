@@ -15,20 +15,10 @@ class Player:
             else: 
                 print(colored(card.number, card.color))
     
-    def check_card_in_hand(self, card: str, topOfStack: Card):
-        ''' Function that checks if attribute Card matches an instance on Players Hand'''
-        for c in self.hand:
-            if topOfStack != None:
-                if c.__repr__() == card and (topOfStack.color == c.color or topOfStack.number == c.number) : #Check if color or number matches
-                    print ("Here!!")
-                    return True
-            else: 
-                if c.__repr__()  == card: 
-                    ("topofstack none")
-                    return True
-        return False
-    
+
     def find_card_in_hand(self, card_input, topOfStack):
+        ''' Returns card if you have the card you desire to play on your hand and if it matches the color or number/action of Top of Stack'''
+
         for card in self.hand:
             if topOfStack is None:
                 if card.__repr__() == card_input:

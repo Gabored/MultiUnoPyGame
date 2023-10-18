@@ -127,16 +127,15 @@ class Game:
             return False
         
     def card_input(self, player):
+        ''' Method that encapsules a while to check the card input if i'ts correct and breaks when check_valid_move finishes execution '''
         while True:
             user_input = input("Type the card you want to play or DRAW: ")
             response = self.check_valid_move(user_input, player)
             if response is not None or response == "Finished":
                 break
-            else:
-                print("Response is: ")
-                print(response)
 
     def check_valid_move(self, user_input, player):
+        ''' Method that handles if player wants to DRAW or input a Card , provides unlimitted attempts to input a card correctly in case of mistype'''
         while True:
             if user_input == "DRAW" and self.num_turn !=0:
                 self.draw_from_deck(player)
