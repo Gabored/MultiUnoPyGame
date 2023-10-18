@@ -14,20 +14,23 @@ class Game:
 
     
     def play(self):
+        ''' Function that represents the action of Playing UNO. A passing turn cycle with calls to draw or propose a card'''
         print("Game Started!")
         while self.check_win() != True:
             print(f"Turn Number: {self.num_turn}")
             player = self.player_on_turn()
-            if self.get_top_card() != None:
+            if self.get_top_card() != None:# If it's first turn , don't print Card on top of stack 
                 print(" Card on Top of Stack: ")
                 colored_print(self.get_top_card())
                 print("\n")
+            print("This is your hand :  ")
             player.print_hand()
-            self.card_input(self.get_top_card(), player)
-            clear() #Clears Terminal after each turn 
+            self.card_input(player)
+            #clear() #Clears Terminal after each turn 
             self.next_turn()
         
     def check_win(self):
+        ''' Function that keeps checking if a Player has won. use to keep the game running'''
         for player in self.players:
             if len(player.hand) == 0:
                 print(f"{player.name} wins the game. Congratulations!")
@@ -36,16 +39,25 @@ class Game:
                 return False 
             
     def player_on_turn(self):
+        ''' Returns the instance of player that has the turn'''
         player = self.players[self.turn]
         print (f"{player.name} it's your turn")
         return player
     
     def next_turn(self): 
+        
+        ''' Changes the turn to next '''
         self.turn = (self.turn + 1) % len(self.players) # Next Turn 
         self.num_turn += 1 # Total of Turns + 1
     
     def draw_from_deck(self, player: Player):
+        ''' This method implements the function that the Player is now able to draw card from the deck and continous
+        drawing until the player decides to stop '''
+        #TODO check if deck has no cards, implement function to widthraw from the stack back to the deck
         clear() #Clears Terminal after each turn 
+        print(" Card on Top of Stack: ")
+        colored_print(self.get_top_card())
+        print("\n")
         user_flag = True
         while len(self.deck) != 0 and user_flag:
             print("This is the card you drew. Will be added to your deck: ")
@@ -100,6 +112,7 @@ class Game:
         return cards
     
     def get_top_card(self):
+        ''' Function that returns the top card of the stack AKA the card that needs to be matched by the player'''
         if self.num_turn != 0:
             top = self.card_stack[-1]
             return top
@@ -107,31 +120,44 @@ class Game:
             return None
     
     def check_valid_response(self, user_input):
+        ''' Function that validates if the user input is valid or needs to be corrected when drawing cards '''
         if user_input == "yes" or user_input == "no":
             return True
         else:
             return False
         
-    def card_input(self, top_card: Card, player: Player):
-        ''' Player Method that ask the Player to input a card from it's hand and check if it's valid to play or if it exist'''
-        user_input = input("Type the card you want to play [format:number/name - color] or if you want to draw a crad type DRAW :")
-        response = self.check_valid_move(user_input, player)
-        if isinstance(response, Card):
-            self.card_stack.append(response)
+    def card_input(self, player):
+        while True:
+            user_input = input("Type the card you want to play or DRAW: ")
+            response = self.check_valid_move(user_input, player)
+            if response is not None or response == "Finished":
+                break
+            else:
+                print("Response is: ")
+                print(response)
 
-    
-    def check_valid_move(self, user_input: str, player:Player):
-        if user_input == "DRAW":
-            self.draw_from_deck(player)
-            return None
-        else :
-            while not player.check_card_in_hand(user_input, self.get_top_card()):
-                print("You can't play that Card. Check Input")
-                card = input("Type the card you want to play: [format:number/name - color] :")
-                return player.remove_card(card)
-            return player.remove_card(user_input)
+    def check_valid_move(self, user_input, player):
+        while True:
+            if user_input == "DRAW" and self.num_turn !=0:
+                self.draw_from_deck(player)
+                return "Finished"
+            if user_input == "DRAW" and self.num_turn == 0:
+                print("You can't DRAW on the first round, you have to put a card")
+                user_input = input("Type the card you want to play: ")
+            else:
+                card = player.find_card_in_hand(user_input, self.get_top_card())
+                if card is not None:
+                    self.card_stack.append(card)
+                    player.pop_card(card)
+                    return card 
+                else:
+                    print("You can't play that card. Check your input.")
+                    user_input = input("Type the card you want to play or DRAW: ")
+            
+            
             
     def print_card_stack(self):
+        ''' Function that prints card stack '''
         for c in self.card_stack:
             colored_print(c)
 

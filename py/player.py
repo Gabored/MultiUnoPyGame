@@ -20,21 +20,27 @@ class Player:
         for c in self.hand:
             if topOfStack != None:
                 if c.__repr__() == card and (topOfStack.color == c.color or topOfStack.number == c.number) : #Check if color or number matches
-                    print ("Here ")
+                    print ("Here!!")
                     return True
             else: 
-                if c.__repr__() == card:
+                if c.__repr__()  == card: 
+                    ("topofstack none")
                     return True
         return False
     
+    def find_card_in_hand(self, card_input, topOfStack):
+        for card in self.hand:
+            if topOfStack is None:
+                if card.__repr__() == card_input:
+                    return card
+            elif card.__repr__() == card_input and (topOfStack.color == card.color or topOfStack.number == card.number):
+                return card
+        return None
+    
 
-    def remove_card(self, card: str):
+    def pop_card(self, card: str):
         ''' Removes a specific instance of card.__repr__() from deck'''
-        for c in self.hand:
-            if c.__repr__() == card:
-                self.hand.remove(c)
-                return c
-
+        return self.hand.remove(card)
 
     
         

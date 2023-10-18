@@ -14,6 +14,7 @@ player2 = Player("Sophie")
 player3 = Player("Paul")
 player4 = Player("Will")
 
+# Play Game 
 
 table = Game(players=[player1, player2, player3, player4])
 table.play()
